@@ -1,28 +1,55 @@
-
 function List(props) {
+  function getInitials(name) {
+    return name
+      .split(" ")
+      .map((w) => w[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  }
+
+  if (props.applications.length === 0) {
+    return (
+      <div className="empty">
+        No applications yet. Add one above!
+      </div>
+    );
+  }
+
   return (
     <div>
-      <h2>Applications List</h2>
-
       {props.applications.map((app, index) => (
-        <div key={index}>
-          <p>{app.company}</p>
-          <p>{app.role}</p>
-          <p>Status: {app.status}</p>
+        <div className="app-card" key={index}>
+          <div className="app-left">
+            <div className="avatar">{getInitials(app.company)}</div>
+            <div>
+              <div className="app-company">{app.company}</div>
+              <div className="app-role">{app.role}</div>
+              <div className="app-date">{app.date}</div>
+            </div>
+          </div>
 
-          <button onClick={() => props.updateStatus(index, "Selected")}>
-            Select
-          </button>
+          <div className="app-right">
+            <select
+              className="status-select"
+              value={app.status}
+              onChange={(e) => props.updateStatus(index, e.target.value)}
+            >
+              <option value="Applied">Applied</option>
+              <option value="Interview">Interview</option>
+              <option value="Selected">Selected</option>
+              <option value="Rejected">Rejected</option>
+            </select>
 
-          <button onClick={() => props.updateStatus(index, "Rejected")}>
-            Reject
-          </button>
+            <span className={`badge badge-${app.status}`}>{app.status}</span>
 
-          <button onClick={() => props.deleteApp(index)}>
-            Delete
-          </button>
-
-          <hr />
+            <button
+              className="del-btn"
+              onClick={() => props.deleteApp(index)}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       ))}
     </div>
@@ -30,4 +57,3 @@ function List(props) {
 }
 
 export default List;
-
